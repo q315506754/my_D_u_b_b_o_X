@@ -85,6 +85,8 @@ public final class URL implements Serializable {
 
 	private final String path;
 
+	private  String description;
+
     private final Map<String, String> parameters;
     
     // ==== cache ====

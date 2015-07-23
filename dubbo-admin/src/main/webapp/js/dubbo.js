@@ -71,12 +71,32 @@ function searchTable(id, column, keyword) {
 		for (var i = 1; i < table.rows.length && sequence == lastSequence; i ++) {
 			var row = table.rows[i];
 			var cell = row.cells[column];
-			if (keyword == null || keyword.length == 0 
+			if (keyword == null || keyword.length == 0
 					|| cell.innerHTML.toLowerCase().indexOf(keyword.toLowerCase()) >= 0) {
 				row.style.display = '';
 			} else {
 				row.style.display = 'none';
 			}
+		}
+	}
+}
+function searchTableMultiCol(id, columns, keyword) {
+	var table = byId(id);
+	if (table) {
+		for (var i = 1; i < table.rows.length; i ++) {
+            var row = table.rows[i];
+
+            for(var j in columns){
+                var cell = row.cells[columns[j]];
+                if (keyword == null || keyword.length == 0
+                    || cell.innerHTML.toLowerCase().indexOf(keyword.toLowerCase()) >= 0) {
+                    row.style.display = '';
+                    break;
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+
 		}
 	}
 }

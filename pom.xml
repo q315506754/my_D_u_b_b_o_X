@@ -83,6 +83,8 @@
 		</profile>
 	</profiles>
 	<properties>
+		<springext-plugin-version>1.2</springext-plugin-version>
+
 		<!-- Common libs -->
 		<spring.bom.version>3.2.9.RELEASE</spring.bom.version>
 		<javassist_version>3.15.0-GA</javassist_version>
@@ -463,6 +465,10 @@
 	</dependencies>
 	<build>
 		<plugins>
+            <plugin>
+                <groupId>com.alibaba.citrus.tool</groupId>
+                <artifactId>springext-maven-plugin</artifactId>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -571,6 +577,11 @@
 
 		<pluginManagement>
 			<plugins>
+                <plugin>
+                    <groupId>com.alibaba.citrus.tool</groupId>
+                    <artifactId>springext-maven-plugin</artifactId>
+                    <version>${springext-plugin-version}</version>
+                </plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>

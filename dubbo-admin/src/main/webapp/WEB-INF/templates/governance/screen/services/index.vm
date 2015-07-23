@@ -24,47 +24,51 @@
 <table cellpadding="0" cellspacing="0" class="list list_dubbo" id="table_o">
 <tr>
 	<th width="20"><input type="checkbox" onclick="checkAll('table_o', 'ids', this.checked)" /></th>
-	<th>$i18n.get("service"):
-	<input type="text" onkeyup="searchTable('table_o', 0, this.value);" onclick="searchTable('table_o', 0, this.value);" />&nbsp;<img src="$rootContextPath.getURI("images/ico_search.png")" width="12" height="12" />
+	<th width="">$i18n.get("service"):
+	<input type="text" onkeyup="searchTableMultiCol('table_o', [0,2], this.value);" onclick="searchTableMultiCol('table_o', [0,2], this.value);" />&nbsp;<img src="$rootContextPath.getURI("images/ico_search.png")" width="12" height="12" />
 	</th>
+    <th>接口描述</th>
 	<th width="135">$i18n.get("status"): 
-	<select onchange="searchTable('table_o', 1, this.value);" onclick="searchTable('table_o', 1, this.value);">
-	<option value="">$i18n.get("all")</option>
-	#if($application)
-	<option value="$i18n.get("provided")">$i18n.get("provided")</option><option value="$i18n.get("consumed")">$i18n.get("consumed")</option>
-	#else
-	<option value="$i18n.get("ok")">$i18n.get("ok")</option><option value="$i18n.get("no.provider")">$i18n.get("no.provider")</option><option value="$i18n.get("no.consumer")">$i18n.get("no.consumer")</option></select>
-	#end
-	</select></th>
-	#if($application)
-	<th width="110">$i18n.get("mock"): <select onchange="searchTable('table_o', 3, this.value);" onclick="searchTable('table_o', 3, this.value);"><option value="">$i18n.get("all")</option><option value="$i18n.get("ok")">$i18n.get("ok")</option><option value="$i18n.get("force.mock")">$i18n.get("force.mock")</option><option value="$i18n.get("fail.mock")">$i18n.get("fail.mock")</option></select></th>
-	<th>$i18n.get("operation")</th>
-	#end
+        <select onchange="searchTable('table_o', 3, this.value);" onclick="searchTable('table_o', 3, this.value);">
+            <option value="">$i18n.get("all")</option>
+            #if($application)
+            <option value="$i18n.get("provided")">$i18n.get("provided")</option><option value="$i18n.get("consumed")">$i18n.get("consumed")</option>
+            #else
+            <option value="$i18n.get("ok")">$i18n.get("ok")</option><option value="$i18n.get("no.provider")">$i18n.get("no.provider")</option><option value="$i18n.get("no.consumer")">$i18n.get("no.consumer")</option></select>
+            #end
+         </select>
+    </th>
+    #if($application)
+    <th width="110">$i18n.get("mock"): <select onchange="searchTable('table_o', 3, this.value);" onclick="searchTable('table_o', 3, this.value);"><option value="">$i18n.get("all")</option><option value="$i18n.get("ok")">$i18n.get("ok")</option><option value="$i18n.get("force.mock")">$i18n.get("force.mock")</option><option value="$i18n.get("fail.mock")">$i18n.get("fail.mock")</option></select></th>
+    <th>$i18n.get("operation")</th>
+    #end
 </tr>
-#foreach($service in $services)
+###foreach($service in $services)
+#foreach($descOne in $descMap.entrySet())
 <tr>
-	<td><input type="checkbox" name="ids" value="$service" /></td>
-	<td>
-		#if(! $providerServices.contains($service))
-			<a href="services/$service/consumers">$service</a>
+	<td width="2%"><input type="checkbox" name="ids" value="$descOne.key" /></td>
+	<td width="50%">
+		#if(! $providerServices.contains($descOne.key))
+			<a href="services/$descOne.key/consumers">$descOne.key</a>
 		#else
-			<a href="services/$service/providers">$service</a>
+			<a href="services/$descOne.key/providers">$descOne.key</a>
 		#end
 	</td>
+    <td width="30%">$descOne.value</td>
 	<td>
 		#if($application)
-			#if($providerServices.contains($service))
+			#if($providerServices.contains($descOne.key))
 				<font color="green">$i18n.get("provided")</font>
-				#if($consumerServices.contains($service))
+				#if($consumerServices.contains($descOne.key))
 					&<font color="blue">$i18n.get("consumed")</font>
 				#end
-			#elseif($consumerServices.contains($service))
+			#elseif($consumerServices.contains($descOne.key))
 				<font color="blue">$i18n.get("consumed")</font>
 			#end
 		#else
-			#if(! $providerServices.contains($service))
+			#if(! $providerServices.contains($descOne.key))
 				<font color="red">$i18n.get("no.provider")</font>
-			#elseif(! $consumerServices.contains($service))
+			#elseif(! $consumerServices.contains($descOne.key))
 				<font color="blue">$i18n.get("no.consumer")</font>
 			#else
 				<font color="green">$i18n.get("ok")</font>
@@ -72,8 +76,8 @@
 		#end
 	</td>
 	#if($application)
-	<td>
-		#if($consumerServices.contains($service))
+	<td width="8%">
+		#if($consumerServices.contains($descOne.key))
 	    	#set($mock=$tool.getOverridesMock($overrides.get($application)))
 	    	#if($mock == "force%3Areturn+null")
 				<font color="red">$i18n.get("force.mocked")</font>
@@ -84,21 +88,21 @@
 			#end
 		#end
     </td>
-	<td>
-		#if($consumerServices.contains($service))
+	<td width="10%">
+		#if($consumerServices.contains($descOne.key))
 			#set($mock=$tool.getOverridesMock($overrides.get($application)))
 	    	#if($mock == "force%3Areturn+null")
-				<a href="#" onclick="showConfirm('$i18n.get("confirm.cancel.mock")', 'services/0/recover?service=$service'); return false;"><img src="$rootContextPath.getURI("images/ico_enable.png")" width="12" height="12" /><span class="ico_font">$i18n.get("cancel.mock")</span></a>
+				<a href="#" onclick="showConfirm('$i18n.get("confirm.cancel.mock")', 'services/0/recover?service=$descOne.key'); return false;"><img src="$rootContextPath.getURI("images/ico_enable.png")" width="12" height="12" /><span class="ico_font">$i18n.get("cancel.mock")</span></a>
 				<span class="ico_line">|</span>
-				<a href="#" onclick="showConfirm('$i18n.get("confirm.fail.mock")', 'services/0/tolerant?service=$service'); return false;"><img src="$rootContextPath.getURI("images/ico_run.png")" width="12" height="12" /><span class="ico_font">$i18n.get("fail.mock")</span></a>
+				<a href="#" onclick="showConfirm('$i18n.get("confirm.fail.mock")', 'services/0/tolerant?service=$descOne.key'); return false;"><img src="$rootContextPath.getURI("images/ico_run.png")" width="12" height="12" /><span class="ico_font">$i18n.get("fail.mock")</span></a>
 			#elseif ($mock == "fail%3Areturn+null")
-				<a href="#" onclick="showConfirm('$i18n.get("confirm.force.mock")', 'services/0/shield?service=$service'); return false;"><img src="$rootContextPath.getURI("images/ico_disable.png")" width="12" height="12" /><span class="ico_font">$i18n.get("force.mock")</span></a>
+				<a href="#" onclick="showConfirm('$i18n.get("confirm.force.mock")', 'services/0/shield?service=$descOne.key'); return false;"><img src="$rootContextPath.getURI("images/ico_disable.png")" width="12" height="12" /><span class="ico_font">$i18n.get("force.mock")</span></a>
 				<span class="ico_line">|</span>
-				<a href="#" onclick="showConfirm('$i18n.get("confirm.cancel.mock")', 'services/0/recover?service=$service'); return false;"><img src="$rootContextPath.getURI("images/ico_enable.png")" width="12" height="12" /><span class="ico_font">$i18n.get("cancel.mock")</span></a>
+				<a href="#" onclick="showConfirm('$i18n.get("confirm.cancel.mock")', 'services/0/recover?service=$descOne.key'); return false;"><img src="$rootContextPath.getURI("images/ico_enable.png")" width="12" height="12" /><span class="ico_font">$i18n.get("cancel.mock")</span></a>
 			#else
-				<a href="#" onclick="showConfirm('$i18n.get("confirm.force.mock")', 'services/0/shield?service=$service'); return false;"><img src="$rootContextPath.getURI("images/ico_disable.png")" width="12" height="12" /><span class="ico_font">$i18n.get("force.mock")</span></a>
+				<a href="#" onclick="showConfirm('$i18n.get("confirm.force.mock")', 'services/0/shield?service=$descOne.key'); return false;"><img src="$rootContextPath.getURI("images/ico_disable.png")" width="12" height="12" /><span class="ico_font">$i18n.get("force.mock")</span></a>
 				<span class="ico_line">|</span>
-				<a href="#" onclick="showConfirm('$i18n.get("confirm.fail.mock")', 'services/0/tolerant?service=$service'); return false;"><img src="$rootContextPath.getURI("images/ico_run.png")" width="12" height="12" /><span class="ico_font">$i18n.get("fail.mock")</span></a>
+				<a href="#" onclick="showConfirm('$i18n.get("confirm.fail.mock")', 'services/0/tolerant?service=$descOne.key'); return false;"><img src="$rootContextPath.getURI("images/ico_run.png")" width="12" height="12" /><span class="ico_font">$i18n.get("fail.mock")</span></a>
 			#end
 		#end
 	</td>
@@ -106,5 +110,5 @@
 </tr>
 #end
 </table>
-<div class="page">$i18n.get("page.total")$services.size()$i18n.get("page.records") </div>
+<div class="page">$i18n.get("page.total")$descMap.entrySet().size()$i18n.get("page.records") </div>
 #end

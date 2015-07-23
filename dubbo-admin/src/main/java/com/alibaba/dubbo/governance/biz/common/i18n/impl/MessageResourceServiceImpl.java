@@ -19,7 +19,7 @@ public class MessageResourceServiceImpl implements MessageResourceService {
     public String get(String key, Object... args) {
         try {
             if (messageSource != null) {
-                return messageSource.getMessage(key, args, key, LocaleUtil.getLocale());
+                    return messageSource.getMessage(key, args, key, LocaleUtil.getLocale());
             }
             return key;
         } catch (NoSuchMessageException e) {

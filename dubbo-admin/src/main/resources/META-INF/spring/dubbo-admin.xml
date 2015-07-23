@@ -24,6 +24,7 @@
 
 	<dubbo:reference id="registryService" interface="com.alibaba.dubbo.registry.RegistryService" check="false" />
 
+
 	<bean id="configService" class="com.alibaba.dubbo.governance.service.impl.ConfigServiceImpl" />
 	
 	<bean id="consumerService" class="com.alibaba.dubbo.governance.service.impl.ConsumerServiceImpl" />

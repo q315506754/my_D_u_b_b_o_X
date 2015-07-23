@@ -16,6 +16,7 @@
 package com.alibaba.dubbo.governance.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.dubbo.registry.common.domain.Provider;
 
@@ -43,7 +44,9 @@ public interface ProviderService {
     Provider findProvider(Long id);
     
     List<String> findServices();
-    
+
+    Map<String,String> findServicesDescMap();
+
     List<String> findAddresses();
     
     List<String> findAddressesByApplication(String application);
